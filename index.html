@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newton is a legend</title>
+    <link rel="shortcut icon" href="images/newton-removebg-preview.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <!-- Linking BoxIcon for Icon -->
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+
+    <h1 id="msg">Hold and drag Mr Newton Slowly!</h1>
+<img id="apple" src="images/apple.png" width="40" height="40" style="position: absolute;">
+<div class="wrapper">
+    <div class="content">
+        <img id="newton" class="header" src="images/newton-removebg-preview.png" width="208" height="242">
+    </div>
+</div>
+<script>
+    function sleep( sleepDuration ){
+        var now = new Date().getTime();
+        while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
+    }
+
+    const wrapper = document.querySelector(".wrapper"),
+        header = wrapper.querySelector("img");
+    function onDrag({movementX, movementY}){
+        let getStyle = window.getComputedStyle(wrapper);
+        let leftVal = parseInt(getStyle.left);
+        let topVal = parseInt(getStyle.top);
+        wrapper.style.left = `${leftVal + movementX}px`;
+        wrapper.style.top = `${topVal + movementY}px`;
+    }
+    header.addEventListener("mousedown", ()=>{
+        header.classList.add("active");
+        header.addEventListener("mousemove", onDrag);
+    });
+    document.addEventListener("mouseup", ()=>{
+        header.classList.remove("active");
+        header.removeEventListener("mousemove", onDrag);
+    });
+    // var step = 100;
+    // function trajectory(id){
+    // }
+    let loop = new Audio("sounds/loop.mp3");
+    let drop = new Audio("sounds/drop.mp3");
+    let newton =document.getElementById('newton');
+    let apple = document.getElementById('apple');
+    let msg = document.getElementById('msg');
+    let newtonheight = 208;
+    let newtonwidth = 242;
+    let y= apple.offsetTop;
+    let x= apple.offsetLeft;
+    let collision = false;
+    let dropping  = false;
+    let curser=0;
+    let time = 10;
+    let science_images = ["science1","science2","science3","science4","science5","science6","science7","science8","science9","science10", "science11", "science12","science13" ];
+    function disp(){
+        var win = window,
+            doc = document,
+            docElem = doc.documentElement,
+            body = doc.getElementsByTagName('body')[0],
+            winx = win.innerWidth || docElem.clientWidth || body.clientWidth,
+            winy = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+        var step = 1;
+        if (x<winx){x=x+step;
+        }else{x=0;
+        }if (y<winy){y=y+step;
+        }else{y=0;}
+
+        let newtonbox = [[parseInt(wrapper.offsetTop), parseInt(wrapper.offsetLeft)-parseInt(newtonwidth/4)], [parseInt(wrapper.offsetTop) + parseInt(newtonheight/5), parseInt(wrapper.offsetLeft)+parseInt(newtonwidth/4)]];
+        let applebox = [[apple.offsetTop,apple.offsetLeft ],[apple.offsetTop+40, apple.offsetLeft+40]];
+        if (collision){
+            document.getElementById('newton').src="images/newton on steroids nobg.png";
+            drop_song();
+            // to slow down the process of showing images
+            time = 2000;
+            show_science();
+
+
+        }else if (!dropping){
+            apple.style.left = x+'px';
+            apple.style.top = y+'px';
+        }
+        check_colision(applebox,newtonbox)
+    }
+    function timer(){
+        disp();
+        my_time = setTimeout('timer()', time);
+    }
+
+    function check_colision(pt1, pt2){
+        pt = pt1[1];
+        if (pt[0]> pt2[0][0] && pt[0] < pt2[1][0] && pt[1] > pt2[0][1] && pt[1] < pt2[1][1] ){
+            collision = true;
+            return collision;
+        }
+        return  false;
+    }
+    function show_science(){
+        if (curser >= science_images.length){
+            curser = 0
+        }
+        document.body.style.background = 'url("images/science/'+ `${science_images[curser]}`+'.jpg")';
+        curser++;
+        console.log(curser);
+    }
+
+    function drop_song(){
+        if(!dropping) {
+            drop.play();
+            dropping = true;
+        }
+        my_time = setTimeout('drop_song()', 10);
+    }
+
+    function conditions(){
+        var win = window,
+            doc = document,
+            docElem = doc.documentElement,
+            body = doc.getElementsByTagName('body')[0],
+            winx = win.innerWidth || docElem.clientWidth || body.clientWidth,
+            winy = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+        // newton holder must stay in the box
+        if (wrapper.offsetLeft < 0){
+            wrapper.style.left = "0px";
+        }if (wrapper.offsetTop < 0){
+            wrapper.style.top = "0px";
+        }
+        }
+    // this one just solves some of the bugs
+    function conditonEngine(){
+        conditions();
+        my_time = setTimeout('conditonEngine()', 10);
+    }
+
+    function background(){
+        if (!dropping){
+            loop.play();
+        }
+        my_time = setTimeout('background()', 10);
+    }
+    // at fisrt the apple is invisible
+    apple.style.height = '0px';
+    newton.addEventListener("mousedown", ()=>{
+        if (!collision){
+            apple.style.height="40px";
+            msg.textContent = "";
+            if (!dropping){
+                background();
+                timer();
+            }
+        }
+    })
+    var win = window,
+        doc = document,
+        docElem = doc.documentElement,
+        body = doc.getElementsByTagName('body')[0],
+        winx = win.innerWidth || docElem.clientWidth || body.clientWidth,
+        winy = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+    console.log(winx,winy); // 1366 671
+</script>
+</body>
+</html>

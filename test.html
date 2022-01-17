@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <style>
+        #apple{
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+<h1 id="number">0</h1>
+<img id="apple" src="images/apple.png" width="40" height="40" style="position: absolute;">
+</body>
+<script>
+    let element = document.getElementById('apple');
+    var y= element.offsetTop;
+    var x= element.offsetLeft;
+    let count = 0;
+    function updateCount() {
+        count = count + 1;
+        document.getElementById("number").innerHTML = count;
+        setTimeout(updateCount, 1000);
+    }
+    updateCount()
+    function disp(){
+      var win = window,
+            doc = document,
+            docElem = doc.documentElement,
+            body = doc.getElementsByTagName('body')[0],
+            winx = win.innerWidth || docElem.clientWidth || body.clientWidth,
+            winy = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+    var step = 1;
+    if (x<winx){x=x+step;
+    }else{x=0;
+    }if (y<winy){y=y+step;
+    }else{y=0;}
+    element.style.left = x+'px';
+    element.style.top = y+'px';
+  }
+  function timer(){
+    disp();
+    my_time = setTimeout('timer()', 10);
+  }
+  timer();
+  function appledrop(){
+        for (var i =0; i<200; i++){
+            element.style.top = i+"px";
+            element.style.left = i+"px";
+        }
+  }
+
+    console.log(x,y)
+    // appledrop();
+</script>
+</html>
