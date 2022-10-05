@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="style.css">
     <!-- Linking BoxIcon for Icon -->
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        * {
+            user-select: none;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,7 +20,9 @@
 <img id="apple" src="images/apple.png" width="40" height="40" style="position: absolute;">
 <div class="wrapper">
     <div class="content">
-        <img id="newton" class="header" src="images/newton-removebg-preview.png" width="208" height="242">
+        <div class="header" id="newton">
+            <img src="images/newton-removebg-preview.png" width="208" height="242" style="pointer-events: none;">
+        </div>
     </div>
 </div>
 <script>
@@ -25,7 +32,7 @@
     }
 
     const wrapper = document.querySelector(".wrapper"),
-        header = wrapper.querySelector("img");
+        header = wrapper.querySelector(".header");
     function onDrag({movementX, movementY}){
         let getStyle = window.getComputedStyle(wrapper);
         let leftVal = parseInt(getStyle.left);
